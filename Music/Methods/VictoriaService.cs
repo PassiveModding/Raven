@@ -24,9 +24,12 @@ namespace RavenBOT.Modules.Music.Methods
         public IDatabase Database { get; }
         public HttpClient HttpClient { get; }
         public LogHandler Logger { get; }
+        public LocalManagementService Local { get; }
         private DiscordShardedClient DiscordClient { get; }
 
-        public readonly string ConfigPath = Path.Combine(AppContext.BaseDirectory, "setup", "Victoria.json");
+        //public readonly string ConfigPath = Path.Combine(AppContext.BaseDirectory, "setup", "Victoria.json");
+
+        public string ConfigKey = "Victoria";
 
         public class VictoriaConfig
         {
@@ -47,15 +50,19 @@ namespace RavenBOT.Modules.Music.Methods
             public string Password { get; set; }
         }
 
-        public VictoriaService(DiscordShardedClient client, ShardChecker checker, IDatabase database, HttpClient httpClient, LogHandler logger)
+        public VictoriaService(DiscordShardedClient client, ShardChecker checker, IDatabase database, HttpClient httpClient, LogHandler logger, LocalManagementService local)
         {
             DiscordClient = client;
             Database = database;
             HttpClient = httpClient;
             Logger = logger;
-            if (!File.Exists(ConfigPath))
+            Local = local;
+
+            var localConfig = local.GetConfig();
+            var vicConfig = localConfig.GetConfig<VictoriaConfig>(ConfigKey);
+            if (vicConfig == null)
             {
-                Logger.Log($"Victoria config not found at {ConfigPath} \nUnable to initialize music module correctly.", LogSeverity.Warning);
+                Logger.Log($"Victoria config not found in LocalConfig. \nUnable to initialize music module correctly.", LogSeverity.Warning);
             }
             else
             {
@@ -99,7 +106,7 @@ namespace RavenBOT.Modules.Music.Methods
         public async Task Configure()
         {
             Logger.Log("Victoria Initializing...");
-            var config = JsonConvert.DeserializeObject<VictoriaConfig>(File.ReadAllText(ConfigPath));
+            var config = Local.GetConfig().GetConfig<VictoriaConfig>(ConfigKey);
 
             Client = new Victoria.LavaShardClient();
             RestClient = new Victoria.LavaRestClient(config.RestConfig.Host, config.RestConfig.Port, config.RestConfig.Password);

@@ -25,12 +25,14 @@ namespace RavenBOT.Modules.Music.Modules
         public VictoriaService Vic { get; }
         public LogHandler Logger { get; }
         public HelpService HelpService { get; }
+        public LocalManagementService Local { get; }
 
-        public Audio(VictoriaService vic, LogHandler logger, HelpService helpService)
+        public Audio(VictoriaService vic, LogHandler logger, HelpService helpService, LocalManagementService local)
         {
             Vic = vic;
             Logger = logger;
             HelpService = helpService;
+            Local = local;
             RestClient = vic.RestClient;
             LavaShardClient = vic.Client;
         }
@@ -332,7 +334,9 @@ namespace RavenBOT.Modules.Music.Modules
             config.MainConfig.Password = password;
             config.RestConfig.Password = config.MainConfig.Password;
 
-            File.WriteAllText(Vic.ConfigPath, JsonConvert.SerializeObject(config, Formatting.Indented));
+            var localConfig = Local.GetConfig();
+            localConfig.AdditionalConfigs[Vic.ConfigKey] = config;
+            Local.SaveConfig(localConfig);
             await ReplyAsync("Victoria config created. Run the Configure command to setup music.");
         }
 
