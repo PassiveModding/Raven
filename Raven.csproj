@@ -10,6 +10,8 @@
     <PackageReference Include="CaptchaGen.NetCore" Version="1.0.2" />
     <PackageReference Include="Google.Cloud.Translation.V2" Version="1.1.0" />
     <PackageReference Include="NAudio" Version="1.9.0" />
+    <PackageReference Include="RavenBOT.Core" Version="1.0.0" />
+    <PackageReference Include="RavenBOT.Database.RavenDatabase" Version="1.0.0" />
     <PackageReference Include="RedditSharp" Version="2.0.0-ci00075" />
     <PackageReference Include="DiscordBotsList.Api.Adapter.Discord.Net" Version="1.1.0" />
     <PackageReference Include="Google.Cloud.Dialogflow.V2" Version="1.0.0-beta02" />
@@ -18,11 +20,6 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.7" />
     <PackageReference Include="morelinq" Version="3.2.0" />
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\RavenBOT-Libraries\RavenBOT.Common\RavenBOT.Common.csproj" />
-    <ProjectReference Include="..\..\RavenBOT-Libraries\RavenBOT.Core\RavenBOT.Core.csproj" />
-    <ProjectReference Include="..\..\RavenBOT-Libraries\RavenBOT.Database.RavenDatabase\RavenBOT.Database.RavenDatabase.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="libsodium.dll">
